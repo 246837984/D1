@@ -1,7 +1,7 @@
 {
   "name": "dsh-flash-notify",
-  "version": "1.0.0",
-  "description": "Flash the DeepSeek Harness taskbar button (or send a desktop notification) the moment a turn finishes — so you notice while the window is minimized. No background daemon.",
+  "version": "1.0.1",
+  "description": "Taskbar flash reminder for DeepSeek Harness: the taskbar button flashes when a turn finishes and goes dark the moment you click back in. No daemon, no auto-start.",
   "type": "module",
   "main": "src/index.js",
   "exports": {
@@ -9,6 +9,7 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "install.ps1",
     "src",
     "assets",
     "cordis.patch.yml",

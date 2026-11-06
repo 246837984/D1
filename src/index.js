@@ -4,11 +4,15 @@
  *
  * Two independent signals so the reminder works on every harness build:
  *
- *  1. `session/event` -> `turn/end` (exact, zero latency). Visible to plugins
- *     that live in the session's event scope.
- *  2. the session projection snapshot watcher (fallback, no internal API).
+ *  1. `session/event` -> `turn/end` (exact, zero latency). A `turn/end` only counts
+ *     after this run has seen the matching `turn/start`, so replayed or restored
+ *     history at launch never flashes.
+ *  2. the session projection snapshot watcher (fallback, no internal API). Its
+ *     baseline deliberately skips snapshots that are still open, because those are
+ *     leftovers from the previous run.
  *
  * Both feed one debounced notifier, so a single finished turn never flashes twice.
+ * A startup grace window absorbs anything a host replays while it boots.
  *
  * @module dsh-flash-notify
  */
@@ -27,6 +31,7 @@ export const inject = []
 const DEFAULTS = {
   enabled: true,
   debounceMs: 1200,
+  startupGraceMs: 10000,
   title: 'DeepSeek Harness',
   message: 'Task finished',
   useEventBus: true,
@@ -43,6 +48,7 @@ export function normalizeConfig(raw = {}) {
   const config = { ...DEFAULTS, ...(raw || {}) }
   const home = homeDir()
   config.debounceMs = Math.max(0, Number(config.debounceMs) || 0)
+  config.startupGraceMs = Math.min(120000, Math.max(0, Number(config.startupGraceMs) || 0))
   config.logLimitBytes = Math.max(4096, Number(config.logLimitBytes) || DEFAULTS.logLimitBytes)
   config.title = String(config.title || DEFAULTS.title)
   config.message = String(config.message || DEFAULTS.message)
@@ -71,6 +77,9 @@ export function apply(ctx, config) {
     return
   }
 
+  const startedAt = Date.now()
+  let sawTurnStart = false
+
   const notifier = options.notifierFactory
     ? options.notifierFactory({ log, title: options.title, message: options.message })
     : createNotifier({
@@ -80,17 +89,41 @@ export function apply(ctx, config) {
         helperPath: options.win32Helper,
         scriptPath: options.win32Script,
       })
-  log(`loaded pid=${process.pid} platform=${notifier.platform} backend=${notifier.backend}`)
+  log(`loaded pid=${process.pid} platform=${notifier.platform} backend=${notifier.backend} grace=${options.startupGraceMs}ms`)
 
   const trigger = createDebouncedTrigger((reason) => notifier.notify(reason), options.debounceMs)
+
+  /**
+   * Everything a host replays while it boots arrives here. A finished turn from a
+   * previous run must not light the taskbar up just because the app was opened.
+   */
+  function fire(reason) {
+    const age = Date.now() - startedAt
+    if (age < options.startupGraceMs) {
+      log(`suppressed (startup grace ${age}ms): ${reason}`)
+      return
+    }
+    trigger.trigger(reason)
+  }
 
   if (options.useEventBus) {
     try {
       ctx.on('session/event', (session, event) => {
-        if (!event || event.type !== 'turn/end') return
+        if (!event) return
+        if (event.type === 'turn/start') {
+          sawTurnStart = true
+          return
+        }
+        if (event.type !== 'turn/end') return
+
+        const id = (session && session.id) || '?'
+        if (!sawTurnStart) {
+          log(`turn/end without a live turn/start (restored history) session=${id} -> ignored`)
+          return
+        }
         const kind = event.data && event.data.reason && event.data.reason.kind
-        log(`turn/end (event) session=${(session && session.id) || '?'} kind=${kind || 'unknown'}`)
-        trigger.trigger(`turn-end:${kind || 'unknown'}`)
+        log(`turn/end (event) session=${id} kind=${kind || 'unknown'}`)
+        fire(`turn-end:${kind || 'unknown'}`)
       })
     } catch (error) {
       log(`event channel unavailable: ${error.message}`)
@@ -102,7 +135,7 @@ export function apply(ctx, config) {
     watcher = createCacheWatcher({
       dir: options.cacheDir,
       log,
-      onTurnEnd: () => trigger.trigger('turn-end:cache'),
+      onTurnEnd: () => fire('turn-end:cache'),
     })
     watcher.start()
   }

@@ -4,6 +4,22 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-11-06
+
+### Fixed
+
+- The taskbar highlight no longer stays lit after the window is clicked back into.
+  `FLASHW_TIMERNOFG` does not reliably clear itself on Chromium windows, so the helper now
+  watches for the window becoming foreground and sends `FLASHW_STOP` explicitly. A bounded
+  follow window (10 minutes) also clears a highlight nobody came back for.
+- A turn that ends while the app is still booting no longer flashes. The event channel only
+  accepts a `turn/end` after this run has seen its `turn/start`, and a startup grace window
+  (10 s, `startupGraceMs`) absorbs anything a host replays during launch.
+
+### Added
+
+- `DshFlash.exe clear` stops a running highlight immediately.
+- `DshFlash.exe flash --follow=MS` / `--no-follow` control the follow-and-clear window.
 ## [Unreleased]
 
 ## [1.0.0] - 2026-11-05

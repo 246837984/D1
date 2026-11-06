@@ -1,9 +1,9 @@
-# dsh-flash-notify
+# Taskbar flash reminder (dsh-flash-notify)
 
 [![ci](https://github.com/246837984/D1/actions/workflows/ci.yml/badge.svg)](https://github.com/246837984/D1/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A DeepSeek Harness plugin: **when a turn finishes, the taskbar button flashes until you come back.**
+A DeepSeek Harness plugin: **when a turn finishes the taskbar button starts flashing — and it goes dark the moment you click back in.**
 
 Built for the "minimize the window and go watch something else" workflow, so you stop checking whether it is done.
 

@@ -44,8 +44,10 @@ static class DshFlash
     [DllImport("user32.dll")]
     static extern IntPtr GetForegroundWindow();
 
+    const uint FLASHW_STOP = 0x0;
     const uint FLASHW_ALL = 0x3;
     const uint FLASHW_TIMERNOFG = 0xC;
+    const int DefaultFollowMs = 600000;
 
     static IntPtr FindDshWindow()
     {
@@ -74,17 +76,56 @@ static class DshFlash
     }
 
     /// <summary>闪烁任务栏按钮；窗口已在前台时不打扰，返回 (flashed, reason)。</summary>
-    static bool Flash(out string reason)
+    static void SendFlash(IntPtr hwnd, uint flags)
+    {
+        FLASHWINFO fwi = new FLASHWINFO();
+        fwi.cbSize = (uint)Marshal.SizeOf(typeof(FLASHWINFO));
+        fwi.hwnd = hwnd;
+        fwi.dwFlags = flags;
+        FlashWindowEx(ref fwi);
+    }
+
+    static bool ClearFlash()
+    {
+        IntPtr hwnd = FindDshWindow();
+        if (hwnd == IntPtr.Zero) return false;
+        SendFlash(hwnd, FLASHW_STOP);
+        return true;
+    }
+
+    /*
+     * Windows does not reliably drop a TIMERNOFG highlight on a Chromium window when
+     * the window is activated again: the taskbar button stays lit until the window is
+     * minimized and restored. So keep watching and clear it explicitly the moment the
+     * window comes to the foreground. The deadline bounds how long this process lives.
+     */
+    static void FollowUntilFocused(IntPtr hwnd, int followMs)
+    {
+        if (followMs <= 0) return;
+        DateTime deadline = DateTime.UtcNow.AddMilliseconds(followMs);
+        while (DateTime.UtcNow < deadline)
+        {
+            if (!IsWindowVisible(hwnd)) { Log("flash cleared: window gone"); return; }
+            if (GetForegroundWindow() == hwnd)
+            {
+                SendFlash(hwnd, FLASHW_STOP);
+                Log("flash cleared: window focused");
+                return;
+            }
+            Thread.Sleep(120);
+        }
+        SendFlash(hwnd, FLASHW_STOP);
+        Log("flash cleared: follow timeout");
+    }
+
+    static bool Flash(int followMs, out string reason)
     {
         IntPtr hwnd = FindDshWindow();
         if (hwnd == IntPtr.Zero) { reason = "window-not-found"; return false; }
         if (GetForegroundWindow() == hwnd) { reason = "already-focused"; return false; }
-        FLASHWINFO fwi = new FLASHWINFO();
-        fwi.cbSize = (uint)Marshal.SizeOf(typeof(FLASHWINFO));
-        fwi.hwnd = hwnd;
-        fwi.dwFlags = FLASHW_ALL | FLASHW_TIMERNOFG;
-        bool ok = FlashWindowEx(ref fwi);
-        reason = ok ? "flashed" : "FlashWindowEx-returned-false(minimized-window)";
+        SendFlash(hwnd, FLASHW_ALL | FLASHW_TIMERNOFG);
+        reason = "flashed";
+        FollowUntilFocused(hwnd, followMs);
         return true;
     }
 
@@ -175,7 +216,7 @@ static class DshFlash
                 lastFlash = DateTime.UtcNow;
             }
             string reason;
-            bool attempted = Flash(out reason);
+            bool attempted = Flash(DefaultFollowMs, out reason);
             Log("turn/end -> " + (attempted ? "flash attempted: " + reason : "skipped: " + reason));
         };
 
@@ -257,6 +298,27 @@ static class DshFlash
         finally { if (mutex != null) mutex.Dispose(); }
     }
 
+    static bool HasFlag(string[] args, string name)
+    {
+        foreach (string a in args)
+        {
+            if (string.Equals(a, name, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
+    }
+
+    static int ArgInt(string[] args, string name, int fallback)
+    {
+        string prefix = name + "=";
+        foreach (string a in args)
+        {
+            if (!a.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) continue;
+            int v;
+            if (int.TryParse(a.Substring(prefix.Length), NumberStyles.Integer, CultureInfo.InvariantCulture, out v)) return v;
+        }
+        return fallback;
+    }
+
     // ================= main =================
     [STAThread]
     static int Main(string[] args)
@@ -267,10 +329,19 @@ static class DshFlash
             case "flash":
             case "force":
                 {
+                    int followMs = ArgInt(args, "--follow", DefaultFollowMs);
+                    if (HasFlag(args, "--no-follow")) followMs = 0;
                     string reason;
-                    bool attempted = Flash(out reason);
-                    Log("manual flash: " + (attempted ? "attempted: " + reason : "skipped: " + reason));
+                    bool attempted = Flash(followMs, out reason);
+                    Log("manual flash: " + (attempted ? "attempted: " + reason : "skipped: " + reason)
+                        + (followMs > 0 ? " (follow=" + followMs + "ms)" : ""));
                     return attempted ? 0 : (reason == "window-not-found" ? 2 : 3);
+                }
+            case "clear":
+                {
+                    bool cleared = ClearFlash();
+                    Log("clear: " + (cleared ? "highlight cleared" : "window-not-found"));
+                    return cleared ? 0 : 2;
                 }
             case "stop":
                 {
@@ -296,7 +367,7 @@ static class DshFlash
                 RunWatch();
                 return 0;
             default:
-                Console.WriteLine("usage: DshFlash.exe [flash|watch|stop|status]");
+                Console.WriteLine("usage: DshFlash.exe [flash|clear|watch|stop|status] [--follow=ms] [--no-follow]");
                 return 64;
         }
     }
