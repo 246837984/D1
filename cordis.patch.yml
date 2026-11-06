@@ -1,0 +1,17 @@
+# dsh-flash-notify bundle patch
+#
+# Mounted by the DSH launcher when this bundle is enabled. `name` is the npm
+# package name, resolved from the profile that installs this bundle.
+#
+# Users can override any field from their own profile/cordis.patch.yml:
+#
+#   - id: dsh-flash-notify
+#     config:
+#       message: 任务已完成
+#
+- insert:
+    - id: dsh-flash-notify
+      name: dsh-flash-notify
+      config:
+        enabled: true
+        debounceMs: 1200
