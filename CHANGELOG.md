@@ -23,5 +23,5 @@ All notable changes to this project are documented here. The format follows
 - Test suite covering turn-state parsing, debounce coalescing, cache watching,
   notification backends and plugin wiring (25 tests, no dependencies).
 
-[Unreleased]: https://github.com/HunYiSage/dsh-flash-notify/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/HunYiSage/dsh-flash-notify/releases/tag/v1.0.0
+[Unreleased]: https://github.com/246837984/D1/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/246837984/D1/releases/tag/v1.0.0

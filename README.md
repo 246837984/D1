@@ -1,6 +1,6 @@
 # dsh-flash-notify
 
-[![ci](https://github.com/HunYiSage/dsh-flash-notify/actions/workflows/ci.yml/badge.svg)](https://github.com/HunYiSage/dsh-flash-notify/actions/workflows/ci.yml)
+[![ci](https://github.com/246837984/D1/actions/workflows/ci.yml/badge.svg)](https://github.com/246837984/D1/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A DeepSeek Harness plugin: **when a turn finishes, the taskbar button flashes until you come back.**
@@ -37,9 +37,10 @@ pwsh -File scripts/install-market.ps1   # writes the index URL into the desktop 
 Index URL:
 
 ```
-https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.json
+https://raw.githubusercontent.com/246837984/D1/main/market/index.json
 ```
 
+> The repository is `D1`; the plugin shows up under its npm name `dsh-flash-notify`.
 > The Discover tab comes from the optional bundle `@deepseek-ai/dsh-experimental-plugin-market-bundle`.
 > The script tells you if it still needs enabling.
 
@@ -48,14 +49,14 @@ https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.j
 From the Plugins page, use **install bundle** with:
 
 ```
-git+https://github.com/HunYiSage/dsh-flash-notify.git
+git+https://github.com/246837984/D1.git
 ```
 
 Or manually (needs pnpm; it is often not on PATH, so `npx pnpm` is safer):
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npx pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
+npx pnpm add git+https://github.com/246837984/D1.git
 ```
 
 Then append `"dsh-flash-notify"` to `dsh.profile.bundles` in that profile's `package.json` and restart.
@@ -129,6 +130,7 @@ node --test "test/**/*.test.mjs"          # 25 tests, Node 18+, no deps
 node scripts/build-market-index.mjs       # regenerate the market index (needs a commit)
 node scripts/verify-market-index.mjs      # validate format 1
 pwsh -File scripts/build-win32-helper.ps1 # rebuild the Windows helper from C#
+pwsh -File scripts/publish.ps1            # commit -> push -> rebuild index -> verify -> push
 ```
 
 ## License

@@ -23,9 +23,9 @@
     },
     "install": {
       "preferred": "tarball",
-      "tarball": "https://codeload.github.com/HunYiSage/dsh-flash-notify/tar.gz/refs/heads/main",
-      "zip": "https://codeload.github.com/HunYiSage/dsh-flash-notify/zip/refs/heads/main",
-      "git": "https://github.com/HunYiSage/dsh-flash-notify.git"
+      "tarball": "https://codeload.github.com/246837984/D1/tar.gz/refs/heads/main",
+      "zip": "https://codeload.github.com/246837984/D1/zip/refs/heads/main",
+      "git": "https://github.com/246837984/D1.git"
     }
   },
   "engines": {
@@ -49,15 +49,15 @@
     "desktop-notification",
     "productivity"
   ],
-  "author": "HunYiSage",
+  "author": "246837984",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HunYiSage/dsh-flash-notify.git"
+    "url": "git+https://github.com/246837984/D1.git"
   },
-  "homepage": "https://github.com/HunYiSage/dsh-flash-notify#readme",
+  "homepage": "https://github.com/246837984/D1#readme",
   "bugs": {
-    "url": "https://github.com/HunYiSage/dsh-flash-notify/issues"
+    "url": "https://github.com/246837984/D1/issues"
   },
   "publishConfig": {
     "access": "public"

@@ -10,8 +10,8 @@
 # complete the browser sign-in once and later pushes are silent.
 
 param(
-    [string]$Owner = 'HunYiSage',
-    [string]$Repo = 'dsh-flash-notify',
+    [string]$Owner = '246837984',
+    [string]$Repo = 'D1',
     [string]$Branch = 'main',
     [string]$Name = '',
     [string]$Email = '',

@@ -1,6 +1,6 @@
 # dsh-flash-notify
 
-[![ci](https://github.com/HunYiSage/dsh-flash-notify/actions/workflows/ci.yml/badge.svg)](https://github.com/HunYiSage/dsh-flash-notify/actions/workflows/ci.yml)
+[![ci](https://github.com/246837984/D1/actions/workflows/ci.yml/badge.svg)](https://github.com/246837984/D1/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 DeepSeek Harness 插件：**一轮任务跑完，任务栏按钮像收到微信消息一样持续闪烁，直到你点回来。**
@@ -38,10 +38,11 @@ pwsh -File scripts/install-market.ps1
 市场索引 URL：
 
 ```
-https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.json
+https://raw.githubusercontent.com/246837984/D1/main/market/index.json
 ```
 
-> 市场的“发现”页来自可选组合包 `@deepseek-ai/dsh-experimental-plugin-market-bundle`。
+> 仓库名是 `D1`，市场里展示的是 npm 包名 `dsh-flash-notify`。
+> 「发现」页来自可选组合包 `@deepseek-ai/dsh-experimental-plugin-market-bundle`；
 > 若尚未启用，脚本会提示你先在插件页打开它。
 
 ### 方式二：直接装 bundle
@@ -49,14 +50,14 @@ https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.j
 在**插件页**里用“安装组合包 / install bundle”贴这个地址：
 
 ```
-git+https://github.com/HunYiSage/dsh-flash-notify.git
+git+https://github.com/246837984/D1.git
 ```
 
 或者手动安装（需要 pnpm；它不一定在 PATH 上，用 `npx pnpm` 最稳）：
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npx pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
+npx pnpm add git+https://github.com/246837984/D1.git
 ```
 
 然后把 `"dsh-flash-notify"` 追加到该 profile `package.json` 的 `dsh.profile.bundles` 数组，重启 Harness。
@@ -137,9 +138,11 @@ Get-Content "$env:USERPROFILE\.dsh\dsh-flash-notify.log" -Tail 20
 
 ## 卸载
 
-1. 插件 → 已安装 → 移除 `dsh-flash-notify`（或从 `dsh.profile.bundles` 删掉，`pnpm remove dsh-flash-notify`）
-2. 重启 Harness
-3. 删除日志 `%USERPROFILE%\.dsh\dsh-flash-notify.log`
+```powershell
+pwsh -File uninstall.ps1          # 移除 bundle 选择、patch 条目、日志（会先备份）
+```
+
+再重启 Harness。
 
 ## 开发
 
@@ -148,6 +151,7 @@ node --test "test/**/*.test.mjs"          # 25 个用例，Node 18+，无依赖
 node scripts/build-market-index.mjs       # 重新生成市场索引（需先 commit）
 node scripts/verify-market-index.mjs      # 按索引格式 1 校验
 pwsh -File scripts/build-win32-helper.ps1 # 从 C# 源码重建 Windows 闪烁器
+pwsh -File scripts/publish.ps1            # 提交 → 推送 → 重建索引 → 校验 → 再推送
 ```
 
 目录：
