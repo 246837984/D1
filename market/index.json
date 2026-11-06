@@ -69,11 +69,11 @@
       "versions": [
         {
           "version": "1.0.0",
-          "publishTimestamp": 1793889869,
+          "publishTimestamp": 1793934371,
           "source": {
             "type": "git",
             "url": "https://github.com/246837984/D1",
-            "commit": "58ee5db7a3690d33c271a51d782462da034927de"
+            "commit": "382bc55699c48c0c61951696558686ea124146e0"
           },
           "engines": {
             "dsh": ">=0.2.0-0"
