@@ -69,11 +69,11 @@
       "versions": [
         {
           "version": "1.0.0",
-          "publishTimestamp": 1793889456,
+          "publishTimestamp": 1793889501,
           "source": {
             "type": "git",
             "url": "https://github.com/HunYiSage/dsh-flash-notify",
-            "commit": "0bea8ac98459657ac72123ff5ecaa894d1a79f91"
+            "commit": "4401a039cce24850805ea29d71450e614205ed38"
           },
           "engines": {
             "dsh": ">=0.2.0-0"
