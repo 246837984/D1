@@ -29,7 +29,7 @@ Windows 优先用随包提供的 12 KB `DshFlash.exe`（`assets/win32/`，源码
 
 ```powershell
 # 1) 把本仓库的市场索引写入 desktop profile（幂等，会先备份 patch）
-pwsh -File scripts/install-market.ps1
+powershell -ExecutionPolicy Bypass -File scripts/install-market.ps1
 
 # 2) 重启 DeepSeek Harness
 # 3) 插件 → 发现 → 搜索 dsh-flash-notify → 安装
@@ -139,7 +139,7 @@ Get-Content "$env:USERPROFILE\.dsh\dsh-flash-notify.log" -Tail 20
 ## 卸载
 
 ```powershell
-pwsh -File uninstall.ps1          # 移除 bundle 选择、patch 条目、日志（会先备份）
+powershell -ExecutionPolicy Bypass -File uninstall.ps1          # 移除 bundle 选择、patch 条目、日志（会先备份）
 ```
 
 再重启 Harness。
@@ -150,8 +150,8 @@ pwsh -File uninstall.ps1          # 移除 bundle 选择、patch 条目、日志
 node --test "test/**/*.test.mjs"          # 25 个用例，Node 18+，无依赖
 node scripts/build-market-index.mjs       # 重新生成市场索引（需先 commit）
 node scripts/verify-market-index.mjs      # 按索引格式 1 校验
-pwsh -File scripts/build-win32-helper.ps1 # 从 C# 源码重建 Windows 闪烁器
-pwsh -File scripts/publish.ps1            # 提交 → 推送 → 重建索引 → 校验 → 再推送
+powershell -ExecutionPolicy Bypass -File scripts/build-win32-helper.ps1 # 从 C# 源码重建 Windows 闪烁器
+powershell -ExecutionPolicy Bypass -File scripts/publish.ps1            # 提交 → 推送 → 重建索引 → 校验 → 再推送
 ```
 
 目录：

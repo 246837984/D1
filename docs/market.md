@@ -62,10 +62,10 @@ which is why the commit must already exist on the remote.
 node --test "test/**/*.test.mjs"
 
 # 3. push source, regenerate the index against the new commit, push again
-pwsh -File scripts/publish.ps1
+powershell -ExecutionPolicy Bypass -File scripts/publish.ps1
 
 # 4. point a harness at it
-pwsh -File scripts/install-market.ps1
+powershell -ExecutionPolicy Bypass -File scripts/install-market.ps1
 ```
 
 `scripts/publish.ps1` commits, pushes, rebuilds `market/index.json` with the

@@ -30,7 +30,7 @@ On Windows the bundled 12 KB `DshFlash.exe` (`assets/win32/`, auditable C# sourc
 ### Plugin market (recommended)
 
 ```powershell
-pwsh -File scripts/install-market.ps1   # writes the index URL into the desktop profile (idempotent, backs up the patch)
+powershell -ExecutionPolicy Bypass -File scripts/install-market.ps1   # writes the index URL into the desktop profile (idempotent, backs up the patch)
 # restart DeepSeek Harness, then: Plugins -> Discover -> search dsh-flash-notify -> Install
 ```
 
@@ -129,8 +129,8 @@ Get-Content "$env:USERPROFILE\.dsh\dsh-flash-notify.log" -Tail 20
 node --test "test/**/*.test.mjs"          # 25 tests, Node 18+, no deps
 node scripts/build-market-index.mjs       # regenerate the market index (needs a commit)
 node scripts/verify-market-index.mjs      # validate format 1
-pwsh -File scripts/build-win32-helper.ps1 # rebuild the Windows helper from C#
-pwsh -File scripts/publish.ps1            # commit -> push -> rebuild index -> verify -> push
+powershell -ExecutionPolicy Bypass -File scripts/build-win32-helper.ps1 # rebuild the Windows helper from C#
+powershell -ExecutionPolicy Bypass -File scripts/publish.ps1            # commit -> push -> rebuild index -> verify -> push
 ```
 
 ## License
