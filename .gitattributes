@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+# Windows scripts are CRLF-tolerant either way, but keep them explicit.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+
+# Prebuilt helper and binary assets must never be line-ending converted.
+*.exe binary
+*.ico binary
+*.png binary
+*.jpg binary
+*.webp binary
