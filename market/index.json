@@ -1,0 +1,85 @@
+{
+  "format": 1,
+  "title": {
+    "en": "dsh-flash-notify",
+    "zh": "DSH 任务完成提醒"
+  },
+  "description": {
+    "en": "Desktop reminders for DeepSeek Harness: flash the taskbar button (or post a notification) when a turn finishes.",
+    "zh": "DeepSeek Harness 任务完成提醒：一轮任务结束时闪烁任务栏按钮或弹出系统通知。"
+  },
+  "metadata": {
+    "categories": {
+      "notifications": {
+        "title": {
+          "en": "Notifications",
+          "zh": "提醒通知"
+        }
+      }
+    },
+    "labels": {
+      "windows": {
+        "title": {
+          "en": "Windows taskbar",
+          "zh": "Windows 任务栏"
+        }
+      },
+      "zero-config": {
+        "title": {
+          "en": "Works out of the box",
+          "zh": "开箱即用"
+        }
+      }
+    },
+    "sortKeys": {}
+  },
+  "plugins": [
+    {
+      "name": "dsh-flash-notify",
+      "title": {
+        "en": "Taskbar flash on turn end",
+        "zh": "任务完成任务栏闪烁"
+      },
+      "description": {
+        "en": "Keeps the DeepSeek Harness taskbar button flashing until you come back, so a finished turn never goes unnoticed while you are watching something else. No background daemon, no auto-start; it lives and dies with the harness.",
+        "zh": "任务跑完后任务栏按钮持续闪烁直到你点回来，最小化去看直播也不会错过。没有常驻守护、不开机自启，跟随 Harness 启动与退出。"
+      },
+      "icon": "icon.svg",
+      "author": "HunYiSage",
+      "homepage": "https://github.com/HunYiSage/dsh-flash-notify#readme",
+      "repository": {
+        "url": "https://github.com/HunYiSage/dsh-flash-notify"
+      },
+      "metadata": {
+        "category": "notifications",
+        "keywords": [
+          "taskbar",
+          "flash",
+          "notification",
+          "turn",
+          "done",
+          "deepseek-harness"
+        ],
+        "labels": [
+          "windows",
+          "zero-config"
+        ],
+        "sortKeys": {}
+      },
+      "versions": [
+        {
+          "version": "1.0.0",
+          "publishTimestamp": 1793889456,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/HunYiSage/dsh-flash-notify",
+            "commit": "0bea8ac98459657ac72123ff5ecaa894d1a79f91"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-0"
+          }
+        }
+      ]
+    }
+  ]
+}
