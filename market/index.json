@@ -1,12 +1,12 @@
 {
   "format": 1,
   "title": {
-    "en": "dsh-flash-notify",
-    "zh": "DSH 任务完成提醒"
+    "en": "Taskbar flash reminder",
+    "zh": "任务栏闪烁提示"
   },
   "description": {
-    "en": "Desktop reminders for DeepSeek Harness: flash the taskbar button (or post a notification) when a turn finishes.",
-    "zh": "DeepSeek Harness 任务完成提醒：一轮任务结束时闪烁任务栏按钮或弹出系统通知。"
+    "en": "Taskbar flash reminder for DeepSeek Harness: the button flashes when a turn finishes and goes dark the moment you click back in.",
+    "zh": "任务结束时任务栏图标闪起来，你点开就熄灭；十分钟没理会自动熄灭。"
   },
   "metadata": {
     "categories": {
@@ -37,12 +37,12 @@
     {
       "name": "dsh-flash-notify",
       "title": {
-        "en": "Taskbar flash on turn end",
-        "zh": "任务完成任务栏闪烁"
+        "en": "Taskbar flash reminder",
+        "zh": "任务栏闪烁提示"
       },
       "description": {
-        "en": "Keeps the DeepSeek Harness taskbar button flashing until you come back, so a finished turn never goes unnoticed while you are watching something else. No background daemon, no auto-start; it lives and dies with the harness.",
-        "zh": "任务跑完后任务栏按钮持续闪烁直到你点回来，最小化去看直播也不会错过。没有常驻守护、不开机自启，跟随 Harness 启动与退出。"
+        "en": "Flashes the DeepSeek Harness taskbar button when a turn finishes and clears it the moment you click back in. If you never come back it clears itself after ten minutes. No daemon, no auto-start; it lives and dies with the harness.",
+        "zh": "一轮任务跑完后任务栏图标闪烁提醒，点开窗口立即熄灭；十分钟没理会自动熄灭。不开机自启、无守护进程，跟随 Harness 启动与退出。"
       },
       "icon": "icon.svg",
       "author": "246837984",
@@ -68,12 +68,12 @@
       },
       "versions": [
         {
-          "version": "1.0.0",
-          "publishTimestamp": 1793934371,
+          "version": "1.0.1",
+          "publishTimestamp": 1793952907,
           "source": {
             "type": "git",
             "url": "https://github.com/246837984/D1",
-            "commit": "382bc55699c48c0c61951696558686ea124146e0"
+            "commit": "32ecda4e94f2f8059832335c47ea9489a6addc6c"
           },
           "engines": {
             "dsh": ">=0.2.0-0"
