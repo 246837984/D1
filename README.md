@@ -37,7 +37,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install-market.ps1   # writes t
 Index URL:
 
 ```
-https://raw.githubusercontent.com/246837984/D1/main/market/index.json
+https://cdn.jsdelivr.net/gh/246837984/D1@main/market/index.json
 ```
 
 > The repository is `D1`; the plugin shows up under its npm name `dsh-flash-notify`.

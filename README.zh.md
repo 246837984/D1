@@ -38,7 +38,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install-market.ps1
 市场索引 URL：
 
 ```
-https://raw.githubusercontent.com/246837984/D1/main/market/index.json
+https://cdn.jsdelivr.net/gh/246837984/D1@main/market/index.json
 ```
 
 > 仓库名是 `D1`，市场里展示的是 npm 包名 `dsh-flash-notify`。
