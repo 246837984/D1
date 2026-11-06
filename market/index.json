@@ -45,10 +45,10 @@
         "zh": "任务跑完后任务栏按钮持续闪烁直到你点回来，最小化去看直播也不会错过。没有常驻守护、不开机自启，跟随 Harness 启动与退出。"
       },
       "icon": "icon.svg",
-      "author": "HunYiSage",
-      "homepage": "https://github.com/HunYiSage/dsh-flash-notify#readme",
+      "author": "246837984",
+      "homepage": "https://github.com/246837984/D1#readme",
       "repository": {
-        "url": "https://github.com/HunYiSage/dsh-flash-notify"
+        "url": "https://github.com/246837984/D1"
       },
       "metadata": {
         "category": "notifications",
@@ -69,11 +69,11 @@
       "versions": [
         {
           "version": "1.0.0",
-          "publishTimestamp": 1793889501,
+          "publishTimestamp": 1793889869,
           "source": {
             "type": "git",
-            "url": "https://github.com/HunYiSage/dsh-flash-notify",
-            "commit": "4401a039cce24850805ea29d71450e614205ed38"
+            "url": "https://github.com/246837984/D1",
+            "commit": "58ee5db7a3690d33c271a51d782462da034927de"
           },
           "engines": {
             "dsh": ">=0.2.0-0"
