@@ -45,9 +45,17 @@ https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.j
 
 ### Install the bundle directly
 
+From the Plugins page, use **install bundle** with:
+
+```
+git+https://github.com/HunYiSage/dsh-flash-notify.git
+```
+
+Or manually (needs pnpm; it is often not on PATH, so `npx pnpm` is safer):
+
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
+npx pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
 ```
 
 Then append `"dsh-flash-notify"` to `dsh.profile.bundles` in that profile's `package.json` and restart.

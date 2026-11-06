@@ -65,7 +65,12 @@ if (-not $remote) {
 if (-not $SkipPush) {
     Step 'push source'
     git push -u origin "HEAD:$Branch"
-    if ($LASTEXITCODE -ne 0) { throw 'push failed (GitHub credentials?)' }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "push failed. If the repository does not exist yet, create it first:"
+        Write-Host "  https://github.com/new?name=$Repo   (no README, no .gitignore, no license)"
+        Write-Host 'Then rerun this script. The first push opens a GitHub sign-in through Git Credential Manager.'
+        throw 'push failed (credentials or missing repository)'
+    }
 }
 
 Step 'market index'

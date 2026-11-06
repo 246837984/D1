@@ -46,9 +46,17 @@ https://raw.githubusercontent.com/HunYiSage/dsh-flash-notify/main/market/index.j
 
 ### 方式二：直接装 bundle
 
+在**插件页**里用“安装组合包 / install bundle”贴这个地址：
+
+```
+git+https://github.com/HunYiSage/dsh-flash-notify.git
+```
+
+或者手动安装（需要 pnpm；它不一定在 PATH 上，用 `npx pnpm` 最稳）：
+
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
+npx pnpm add git+https://github.com/HunYiSage/dsh-flash-notify.git
 ```
 
 然后把 `"dsh-flash-notify"` 追加到该 profile `package.json` 的 `dsh.profile.bundles` 数组，重启 Harness。
