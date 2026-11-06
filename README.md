@@ -126,7 +126,7 @@ Get-Content "$env:USERPROFILE\.dsh\dsh-flash-notify.log" -Tail 20
 ## Development
 
 ```powershell
-node --test "test/**/*.test.mjs"          # 25 tests, Node 18+, no deps
+node --test          # 25 tests, Node 18+, no deps
 node scripts/build-market-index.mjs       # regenerate the market index (needs a commit)
 node scripts/verify-market-index.mjs      # validate format 1
 powershell -ExecutionPolicy Bypass -File scripts/build-win32-helper.ps1 # rebuild the Windows helper from C#

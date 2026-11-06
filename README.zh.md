@@ -147,7 +147,7 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1          # 移除 bundle 
 ## 开发
 
 ```powershell
-node --test "test/**/*.test.mjs"          # 25 个用例，Node 18+，无依赖
+node --test          # 25 个用例，Node 18+，无依赖
 node scripts/build-market-index.mjs       # 重新生成市场索引（需先 commit）
 node scripts/verify-market-index.mjs      # 按索引格式 1 校验
 powershell -ExecutionPolicy Bypass -File scripts/build-win32-helper.ps1 # 从 C# 源码重建 Windows 闪烁器
