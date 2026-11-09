@@ -1,6 +1,6 @@
 {
   "name": "dsh-flash-notify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Taskbar flash reminder for DeepSeek Harness: the taskbar button flashes when a turn finishes and goes dark the moment you click back in. No daemon, no auto-start.",
   "type": "module",
   "main": "src/index.js",

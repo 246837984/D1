@@ -2,14 +2,16 @@
  * dsh-flash-notify — get a taskbar flash (or a desktop notification) the moment
  * a DeepSeek Harness turn finishes, so you notice while the window is minimized.
  *
- * Two independent signals so the reminder works on every harness build:
+ * Two signals, in strict priority order:
  *
- *  1. `session/event` -> `turn/end` (exact, zero latency). A `turn/end` only counts
- *     after this run has seen the matching `turn/start`, so replayed or restored
- *     history at launch never flashes.
- *  2. the session projection snapshot watcher (fallback, no internal API). Its
- *     baseline deliberately skips snapshots that are still open, because those are
- *     leftovers from the previous run.
+ *  1. `session/event` -> `turn/end` (exact, zero latency). The harness only emits
+ *     this for the conversation the user is actually looking at, so subagents and
+ *     background sessions never flash. A `turn/end` only counts after this run has
+ *     seen its `turn/start`, so replayed history at launch never flashes.
+ *  2. the session projection snapshot watcher — a fallback for harness builds that
+ *     do not surface the event. It watches every session file, so it would also fire
+ *     for subagents; it therefore stays silent for as long as the event channel is
+ *     alive, and only takes over when the event channel never spoke.
  *
  * Both feed one debounced notifier, so a single finished turn never flashes twice.
  * A startup grace window absorbs anything a host replays while it boots.
@@ -79,6 +81,7 @@ export function apply(ctx, config) {
 
   const startedAt = Date.now()
   let sawTurnStart = false
+  let eventChannelAlive = false
 
   const notifier = options.notifierFactory
     ? options.notifierFactory({ log, title: options.title, message: options.message })
@@ -97,10 +100,10 @@ export function apply(ctx, config) {
    * Everything a host replays while it boots arrives here. A finished turn from a
    * previous run must not light the taskbar up just because the app was opened.
    */
-  function fire(reason) {
+  function fire(reason, source) {
     const age = Date.now() - startedAt
     if (age < options.startupGraceMs) {
-      log(`suppressed (startup grace ${age}ms): ${reason}`)
+      log(`suppressed (startup grace ${age}ms): ${reason} [${source}]`)
       return
     }
     trigger.trigger(reason)
@@ -112,10 +115,12 @@ export function apply(ctx, config) {
         if (!event) return
         if (event.type === 'turn/start') {
           sawTurnStart = true
+          eventChannelAlive = true
           return
         }
         if (event.type !== 'turn/end') return
 
+        eventChannelAlive = true
         const id = (session && session.id) || '?'
         if (!sawTurnStart) {
           log(`turn/end without a live turn/start (restored history) session=${id} -> ignored`)
@@ -123,7 +128,7 @@ export function apply(ctx, config) {
         }
         const kind = event.data && event.data.reason && event.data.reason.kind
         log(`turn/end (event) session=${id} kind=${kind || 'unknown'}`)
-        fire(`turn-end:${kind || 'unknown'}`)
+        fire(`turn-end:${kind || 'unknown'}`, 'event')
       })
     } catch (error) {
       log(`event channel unavailable: ${error.message}`)
@@ -135,7 +140,19 @@ export function apply(ctx, config) {
     watcher = createCacheWatcher({
       dir: options.cacheDir,
       log,
-      onTurnEnd: () => fire('turn-end:cache'),
+      onTurnEnd: (file) => {
+        /*
+         * The projection watcher sees every session, including subagents and
+         * background conversations. Once the event channel has proven it works, this
+         * channel would only add false flashes for turns the user is still waiting on,
+         * so it stays quiet.
+         */
+        if (eventChannelAlive) {
+          log(`turn/end (cache) suppressed: event channel is live (${file})`)
+          return
+        }
+        fire('turn-end:cache', 'cache')
+      },
     })
     watcher.start()
   }

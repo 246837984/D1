@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-11-09
+
+### Fixed
+
+- The taskbar no longer flashes in the middle of a task. The projection watcher sees
+  every session file, including subagents and background conversations, so a subagent
+  finishing used to look like the user's own turn being done. It now stays silent while
+  the event channel is alive and only takes over when that channel never speaks.
+- Log lines now name the channel that fired (`[event]` / `[cache]` / `suppressed`), so a
+  future misfire can be traced to its source in one glance.
 ## [1.0.1] - 2026-11-06
 
 ### Fixed
