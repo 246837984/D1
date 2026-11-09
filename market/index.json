@@ -68,12 +68,12 @@
       },
       "versions": [
         {
-          "version": "1.0.1",
-          "publishTimestamp": 1793952907,
+          "version": "1.0.2",
+          "publishTimestamp": 1794200941,
           "source": {
             "type": "git",
             "url": "https://github.com/246837984/D1",
-            "commit": "32ecda4e94f2f8059832335c47ea9489a6addc6c"
+            "commit": "15b0901da971a72c417c38741c2fce9d1deb9eae"
           },
           "engines": {
             "dsh": ">=0.2.0-0"
